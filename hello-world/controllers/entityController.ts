@@ -11,17 +11,14 @@ export async function createEntity(entity: string, requestBody: string): Promise
 
     const item: any = {
         pk: entity,
-        sk: entity + '#' + entityId,
+        sk: 'id#' + entityId,
         entity: entity,
         entityId: entityId,
         createdAt: todayISODate,
         updatedAt: todayISODate,
     };
 
-    const dbItem: any = {
-        ...item,
-        json,
-    };
+    const dbItem: any = { ...item, ...json };
 
     const result = await createDBItem(dbItem);
 

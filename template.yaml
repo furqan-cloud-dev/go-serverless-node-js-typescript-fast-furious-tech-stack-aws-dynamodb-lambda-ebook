@@ -17,6 +17,9 @@ Resources:
       CodeUri: hello-world/
       Handler: app.lambdaHandler
       Runtime: nodejs18.x
+      Environment:
+        Variables:
+          SERVER_ENV: LOCAL
       Policies:
         - DynamoDBCrudPolicy:
             TableName: ecom

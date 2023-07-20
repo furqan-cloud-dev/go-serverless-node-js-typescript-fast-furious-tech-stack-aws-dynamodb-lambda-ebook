@@ -28,26 +28,25 @@ let client: DynamoDBDocumentClient = null;
 export const getClient = (): DynamoDBDocumentClient => {
     if (client) return client;
 
-    client = new DynamoDBClient({
-        region: 'us-east-1',
-        endpoint: 'http://docker.for.mac.localhost:8000',
-        credentials: {
-            accessKeyId: 'fakeAccessKeyId',
-            secretAccessKey: 'fakeSecretKeyId',
-        },
-    });
+    if (process.env.SERVER_ENV === "LOCAL") {
+        client = new DynamoDBClient({
+            region: 'us-east-1',
+            endpoint: 'http://docker.for.mac.localhost:8000',
+            credentials: {
+                accessKeyId: 'fakeAccessKeyId',
+                secretAccessKey: 'fakeSecretKeyId',
+            },
+        });
+    } else {
+        // Create an Amazon DynamoDB service client object.
+        const ddbClient = new DynamoDBClient({ region: 'us-east-1' });
+        // Create the DynamoDB document client.
+        client = DynamoDBDocumentClient.from(ddbClient, {
+            marshallOptions,
+            unmarshallOptions,
+        });
+    }
 
     return client;
-    /*
 
-    // Create an Amazon DynamoDB service client object.
-    const ddbClient = new DynamoDBClient({ region: 'us-east-1' });
-    // Create the DynamoDB document client.
-    client = DynamoDBDocumentClient.from(ddbClient, {
-        marshallOptions,
-        unmarshallOptions,
-    });
-
-    return client;
-    */
 };
